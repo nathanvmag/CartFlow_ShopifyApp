@@ -1,0 +1,32 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "c201716c57275d0409c9cdc19f066684"
+name = "cartflow-app"
+application_url = "https://example.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+include_config_on_deploy = true
+dev_store_url = "cartflow-dev.myshopify.com"
+
+[webhooks]
+api_version = "2026-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+  [[webhooks.subscriptions]]
+  topics = ["orders/create","orders/paid","orders/updated", "orders/cancelled", "orders/fulfilled"]
+  uri = "https://webhook-test.com/9f96dee6edaebd7b520eb2c41ab8aa9c"
+
+[access_scopes]
+scopes = "read_orders,read_fulfillments,write_fulfillments,read_products,read_inventory,read_locations,read_merchant_managed_fulfillment_orders,write_merchant_managed_fulfillment_orders"
+
+[auth]
+redirect_urls = [ "https://example.com/api/auth" ]
