@@ -88,9 +88,6 @@ export default function Index() {
   const fetcher = useFetcher<typeof action>();
 
   const shopify = useAppBridge();
-  const isLoading =
-    ["loading", "submitting"].includes(fetcher.state) &&
-    fetcher.formMethod === "POST";
 
   useEffect(() => {
     if (fetcher.data?.product?.id) {
@@ -98,14 +95,8 @@ export default function Index() {
     }
   }, [fetcher.data?.product?.id, shopify]);
 
-  const generateProduct = () => fetcher.submit({}, { method: "POST" });
-
   return (
-    <s-page heading="Shopify app template">
-      <s-button slot="primary-action" onClick={generateProduct}>
-        Generate a product
-      </s-button>
-
+    <s-page heading="CartFlow">
       <s-section heading="Congrats on creating a new Shopify app 🎉">
         <s-paragraph>
           This embedded app template uses{" "}
@@ -140,12 +131,6 @@ export default function Index() {
           mutation in our API references.
         </s-paragraph>
         <s-stack direction="inline" gap="base">
-          <s-button
-            onClick={generateProduct}
-            {...(isLoading ? { loading: true } : {})}
-          >
-            Generate a product
-          </s-button>
           {fetcher.data?.product && (
             <s-button
               onClick={() => {
