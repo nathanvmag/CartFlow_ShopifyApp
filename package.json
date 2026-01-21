@@ -3,10 +3,11 @@
   "private": true,
   "scripts": {
     "build": "react-router build",
-    "dev": "shopify app dev",
+    "dev": "shopify app dev --config=shopify.app.dev.toml",
     "config:link": "shopify app config link",
     "generate": "shopify app generate",
-    "deploy": "shopify app deploy",
+    "deploy:staging": "shopify app deploy --config=shopify.app.staging.toml",
+    "deploy:prod": "shopify app deploy --config=shopify.app.prod.toml",
     "config:use": "shopify app config use",
     "env": "shopify app env",
     "start": "react-router-serve ./build/server/index.js",
