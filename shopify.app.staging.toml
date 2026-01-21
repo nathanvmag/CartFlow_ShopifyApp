@@ -2,7 +2,7 @@
 
 client_id = "f7e1b8779053d47748526aad60ad60e5"
 name = "CartFlow"
-application_url = "https://example.com"
+application_url = "https://shopifyapp.cartflow.tech"
 embedded = true
 
 [build]
@@ -29,4 +29,4 @@ api_version = "2026-04"
 scopes = "read_orders,read_fulfillments,write_fulfillments,read_products,read_inventory,read_locations,read_merchant_managed_fulfillment_orders,write_merchant_managed_fulfillment_orders"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [ "https://shopifyapp.cartflow.tech/api/auth" ]
