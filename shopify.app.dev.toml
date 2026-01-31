@@ -23,7 +23,7 @@ api_version = "2026-04"
 
   [[webhooks.subscriptions]]
   topics = ["orders/create","orders/paid","orders/updated", "orders/cancelled", "orders/fulfilled"]
-  uri = "https://numerical-freeman-ethnologic.ngrok-free.dev/api/webhook-integracao/shopify"
+  uri = "/api/shopify/orders-webhook"
 
 [access_scopes]
 scopes = "read_orders,read_fulfillments,write_fulfillments,read_products,read_inventory,read_locations,read_merchant_managed_fulfillment_orders,write_merchant_managed_fulfillment_orders"

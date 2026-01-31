@@ -10,6 +10,8 @@ type RotateTokenResponse = {
 };
 
 export default function SettingsPage() {
+  const appCartFlowUrl = import.meta.env.VITE_APP_CARTFLOW_URL;
+
   const [shop, setShop] = useState("");
   const [shopCopied, setShopCopied] = useState(false);
 
@@ -19,14 +21,12 @@ export default function SettingsPage() {
   const [loadingTokenAction, setLoadingTokenAction] = useState(false);
   const [tokenCopied, setTokenCopied] = useState(false);
 
-  // Carrega info inicial (shop + status do token)
   useEffect(() => {
     const loadInfo = async () => {
       setLoadingInfo(true);
       try {
         const res = await fetch("/api/settings/info");
         if (!res.ok) {
-          // tratar erro se quiser
           setLoadingInfo(false);
           return;
         }
@@ -34,7 +34,7 @@ export default function SettingsPage() {
         const data: SettingsInfoResponse = await res.json();
         setShop(data.shop);
       } catch (e) {
-        // tratar erro
+        shopify.toast.show("Erro ao carregar informações", { duration: 3000, isError: true });
       } finally {
         setLoadingInfo(false);
       }
@@ -51,7 +51,6 @@ export default function SettingsPage() {
     setTimeout(() => setShopCopied(false), 2000);
   };
 
-
   const rotateToken = async () => {
     setLoadingTokenAction(true);
     try {
@@ -60,7 +59,7 @@ export default function SettingsPage() {
       });
 
       if (!res.ok) {
-        // tratar erro
+        shopify.toast.show("Erro ao rotacionar token", { duration: 3000, isError: true });
         setLoadingTokenAction(false);
         return;
       }
@@ -68,10 +67,10 @@ export default function SettingsPage() {
       const data: RotateTokenResponse = await res.json();
 
       setToken(data.token);
+      shopify.toast.show("Token rotacionado", { duration: 3000 });
     } catch (e) {
-      // tratar erro
-    }
-    finally {
+      shopify.toast.show(`Erro ao rotacionar token`, { duration: 3000, isError: true });
+    } finally {
       setLoadingTokenAction(false);
     }
   };
@@ -88,7 +87,6 @@ export default function SettingsPage() {
 
   return (
     <s-page heading="Configurações">
-      {/* Seção da URL da loja */}
       <s-section heading="Loja Shopify">
         <s-paragraph>
           Esta é a URL da sua loja Shopify. Use-a para identificar sua loja ao
@@ -119,8 +117,7 @@ export default function SettingsPage() {
         </s-stack>
       </s-section>
 
-      {/* Seção do token da plataforma */}
-      <s-section heading="Token de Integração">
+      <s-section heading="Token de Autenticação">
         <s-paragraph>
           Use este token, junto com a URL da loja, para autenticar seu sistema
           externo ao se comunicar com este app.
@@ -128,7 +125,7 @@ export default function SettingsPage() {
 
         <s-stack>
           <s-text-field
-            label="Token de integração"
+            label="Token de autenticação"
             value={token}
             help-text="Este token será exibido apenas uma vez; copie e armazene com segurança."
             icon="key"
@@ -137,7 +134,6 @@ export default function SettingsPage() {
 
           <s-box padding="base base base none">
             <s-stack direction="inline" gap="base">
-              {/* Botão principal: Ver ou Rotacionar, dependendo se já foi visto */}
               <s-button
                 variant="primary"
                 loading={isLoading}
@@ -146,7 +142,6 @@ export default function SettingsPage() {
                 Gerar novo token
               </s-button>
 
-              {/* Botão de copiar token */}
               <s-button
                 variant="secondary"
                 disabled={!token}
@@ -160,12 +155,40 @@ export default function SettingsPage() {
         </s-stack>
       </s-section>
 
+      <s-section>
+        <s-stack direction="block" gap="base">
+          <s-heading>CartFlow</s-heading>
+
+          <s-paragraph>
+            Acesse o CartFlow para cadastrar sua loja e testar a integração.
+          </s-paragraph>
+
+          <s-stack direction="inline" gap="base">
+            <s-button
+              variant="primary"
+              target="_blank"
+              href={appCartFlowUrl || "#"}
+            >
+              Acessar CartFlow
+            </s-button>
+          </s-stack>
+        </s-stack>
+      </s-section>
+
       <s-section slot="aside" heading="Importante">
-        <s-paragraph>
-          Trate este token como uma senha. Não compartilhe com terceiros sem
-          necessidade. Se suspeitar de vazamento, utilize o botão
-          &quot;Rotacionar token&quot; para gerar um novo.
-        </s-paragraph>
+        <s-stack direction="block" gap="base">
+          <s-paragraph>Trate este token como uma senha.</s-paragraph>
+
+          <s-paragraph>
+            Ele é exibido apenas neste momento. Ao sair da página, não será
+            possível visualizá-lo novamente.
+          </s-paragraph>
+
+          <s-paragraph>
+            Caso perca as credenciais ou suspeite de comprometimento, utilize o
+            botão <strong>“Gerar novo token”</strong> para criar um novo.
+          </s-paragraph>
+        </s-stack>
       </s-section>
     </s-page>
   );

@@ -40,4 +40,18 @@ model Shop {
   tokenViewedAt     DateTime?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
+
+  webhookAllowedProducts ShopWbhookAllowedProducts[]
+}
+
+model ShopWbhookAllowedProducts {
+  id        String   @id @default(cuid())
+  shopId    String
+  shop      Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  productId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([shopId, productId])
+  @@map("shop_webhook_allowed_products")
 }
